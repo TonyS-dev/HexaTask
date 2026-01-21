@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    container_name: projectmanagement-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=postgres
+      - DB_NAME=projectmanagement
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - JWT_SECRET=404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+    depends_on:
+      - postgres
+    networks:
+      - acnexus-net
+
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: projectmanagement-frontend
+    ports:
+      - "4200:80"
+    networks:
+      - acnexus-net
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: projectmanagement-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=projectmanagement
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - acnexus-net
+
+  prometheus:
+    image: prom/prometheus
+    container_name: projectmanagement-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - prom_data:/prometheus
+    networks:
+      - acnexus-net
+
+  grafana:
+    image: grafana/grafana
+    container_name: projectmanagement-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - acnexus-net
+
+volumes:
+  postgres_data:
+  prom_data:
+  grafana_data:
+
+networks:
+  acnexus-net:
+    driver: bridge
