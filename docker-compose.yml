@@ -1,70 +1,106 @@
-version: '3.8'
-
 services:
-  backend:
-    build: .
-    container_name: projectmanagement-backend
-    ports:
-      - "8080:8080"
-    environment:
-      - DB_HOST=postgres
-      - DB_NAME=projectmanagement
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
-      - JWT_SECRET=404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-    depends_on:
-      - postgres
-    networks:
-      - acnexus-net
-
-  frontend:
-    build: 
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: projectmanagement-frontend
-    ports:
-      - "4200:80"
-    networks:
-      - acnexus-net
-
+  # PostgreSQL Database service
   postgres:
     image: postgres:15-alpine
-    container_name: projectmanagement-postgres
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_DB=projectmanagement
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+    container_name: projectmanagement-postgres-db
+    restart: unless-stopped
     networks:
       - acnexus-net
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    # Spring Boot Backend (HOT RELOAD)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: build # Trick to skip the final runtime image and use the build stage
+    container_name: projectmanagement-backend
+    networks:
+      - acnexus-net
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: ${JWT_EXPIRATION}
+    volumes:
+      - ./backend:/app # This mounts the local backend code into the container
+      - gradle_cache:/home/gradle/.gradle # It stores Gradle cache to speed up builds
+    command: gradle bootRun --args='--spring.profiles.active=docker'
+    restart: unless-stopped
+
+  # Angular Frontend (HOT RELOAD)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: builder # Trick to skip the final runtime image and use the build stage
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8080/api}
+    container_name: projectmanagement-frontend
+    networks:
+      - acnexus-net
+    ports:
+      - "4200:4200" # Development port
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app # This mounts the local frontend code into the container
+      - /app/node_modules # Ignore node_modules from the host
+    command: npm start -- --host 0.0.0.0 --poll 2000
+    restart: unless-stopped
 
   prometheus:
     image: prom/prometheus
     container_name: projectmanagement-prometheus
-    ports:
-      - "9090:9090"
-    volumes:
-      - prom_data:/prometheus
+    restart: unless-stopped
     networks:
       - acnexus-net
+    volumes:
+      - ./backend/prometheus:/etc/prometheus
+    ports:
+      - "9090:9090"
 
   grafana:
     image: grafana/grafana
     container_name: projectmanagement-grafana
+    restart: unless-stopped
+    networks:
+      - acnexus-net
     ports:
       - "3000:3000"
     volumes:
       - grafana_data:/var/lib/grafana
-    networks:
-      - acnexus-net
+    depends_on:
+      - prometheus
 
 volumes:
   postgres_data:
   prom_data:
   grafana_data:
+  gradle_cache:
 
 networks:
   acnexus-net:
