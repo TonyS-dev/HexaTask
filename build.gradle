@@ -1,100 +1,25 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.5.10-SNAPSHOT'
-    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.springframework.boot' version '3.4.1' apply false
+    id 'io.spring.dependency-management' version '1.1.7' apply false
 }
 
-group = 'com.acnexus'
-version = '1.0.0-MVP'
-description = 'projectmanagement'
+allprojects {
+    group = 'com.acnexus'
+    version = '1.0.0-MVP'
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+    repositories {
+        mavenCentral()
+        maven { url = 'https://repo.spring.io/snapshot' }
     }
 }
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
+subprojects {
+    apply plugin: 'java'
 
-repositories {
-    mavenCentral()
-    maven { url = 'https://repo.spring.io/snapshot' }
-}
-
-ext {
-    set('jjwtVersion', "0.11.5")
-    set('mapstructVersion', "1.5.5.Final")
-    set('springDocVersion', "2.8.11")
-}
-
-dependencies {
-    // --- CORE & WEB ---
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-
-    // --- OBSERVABILITY ---
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'net.ttddyy.observation:datasource-micrometer-spring-boot:1.2.1'
-    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
-
-    // --- DATA & MIGRATION ---
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    runtimeOnly 'org.postgresql:postgresql'
-    implementation 'org.flywaydb:flyway-core'
-    implementation 'org.flywaydb:flyway-database-postgresql'
-
-    // --- SECURITY & JWT ---
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation "io.jsonwebtoken:jjwt-api:${jjwtVersion}"
-    runtimeOnly "io.jsonwebtoken:jjwt-impl:${jjwtVersion}"
-    runtimeOnly "io.jsonwebtoken:jjwt-jackson:${jjwtVersion}"
-
-    // --- PERFORMANCE & CACHE ---
-    implementation 'org.springframework.boot:spring-boot-starter-cache'
-    implementation 'com.github.ben-manes.caffeine:caffeine'
-
-    // --- TOOLS & UTILS ---
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-
-    // --- MAPPING (MapStruct) ---
-    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
-    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
-    // For better Lombok and MapStruct integration
-    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
-
-    // --- DOCUMENTATION ---
-    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springDocVersion}"
-
-    // --- TESTING ---
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    testRuntimeOnly 'com.h2database:h2'
-
-    // --- ARCHITECTURE TESTING ---
-    testImplementation 'com.tngtech.archunit:archunit-junit5:1.2.1'
-
-    // --- SQL LOGGING ---
-    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.1'
-
-    // --- API RATE LIMITING ---
-    implementation 'com.bucket4j:bucket4j-core:8.10.1'
-
-    // --- ADVANCED AUDITING ---
-    implementation 'org.hibernate.orm:hibernate-envers'
-}
-
-tasks.named('test') {
-    useJUnitPlatform()
-    testLogging {
-        events "FAILED", "SKIPPED"
-        exceptionFormat "FULL"
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
     }
 }

@@ -1,10 +1,7 @@
 pluginManagement {
     repositories {
-        mavenCentral()
         maven { url = 'https://repo.spring.io/snapshot' }
         gradlePluginPortal()
     }
 }
-
 rootProject.name = 'projectmanagement'
-include 'backend'
