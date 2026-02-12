@@ -27,7 +27,7 @@ import { AuthService } from '../../core/services/auth.service';
   template: `
     <div class="min-h-screen bg-background flex flex-col items-center justify-center p-6">
       <div class="mb-12 text-center">
-        <h1 class="text-4xl font-bold tracking-tight text-primary mb-2">ProjectNexus</h1>
+        <h1 class="text-4xl font-bold tracking-tight text-primary mb-2">HexaTask</h1>
         <p class="text-slate-500">Log in to manage your projects</p>
       </div>
 

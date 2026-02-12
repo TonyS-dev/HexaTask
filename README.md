@@ -1,4 +1,4 @@
-# Project Management System
+# HexaTask - Project Management System
 
 A Domain-Driven Design (DDD) Hexagonal Architecture implementation for a Project & Task Management application.
 
@@ -6,7 +6,7 @@ A Domain-Driven Design (DDD) Hexagonal Architecture implementation for a Project
 
 ## 🚀 Overview
 
-Project Management System is a full-stack application featuring Domain-Driven Design with Hexagonal Architecture. The focus is on clean code, ownership-based authorization, comprehensive testing, and a secure JWT dual-token authentication flow for seamless user project and task management.
+Hexa Task System is a full-stack application featuring Domain-Driven Design with Hexagonal Architecture. The focus is on clean code, ownership-based authorization, comprehensive testing, and a secure JWT dual-token authentication flow for seamless user project and task management.
 
 This repository contains the complete scaffold with Docker support and local development scripts.
 
@@ -391,9 +391,9 @@ if (!resource.getOwnerId().equals(currentUserId)) {
 ## 📂 Project Structure
 
 ```
-projectmanagement/
+hexatask/
 ├── backend/
-│   ├── src/main/java/com/acnexus/projectmanagement/
+│   ├── src/main/java/com/hexatask/hexatask/
 │   │   ├── domain/              # Pure business logic (no Spring)
 │   │   │   ├── model/           # Domain entities
 │   │   │   ├── ports/           # Interfaces (in/out)
@@ -405,7 +405,7 @@ projectmanagement/
 │   │   │   ├── entities/        # JPA entities
 │   │   │   ├── mappers/         # Domain ↔ Entity mapping
 │   │   │   └── config/          # Spring config
-│   │   └── ProjectManagementApplication.java
+│   │   └── HexataskApplication.java
 │   ├── src/test/java/           # Unit tests (JUnit 5 + Mockito)
 │   ├── src/main/resources/
 │   │   ├── application.yml      # Configuration

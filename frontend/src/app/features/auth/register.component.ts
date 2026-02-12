@@ -27,7 +27,7 @@ import { AuthService } from '../../core/services/auth.service';
   template: `
     <div class="min-h-screen bg-background flex flex-col items-center justify-center p-6">
       <div class="mb-12 text-center">
-        <h1 class="text-4xl font-bold tracking-tight text-primary mb-2">ProjectNexus</h1>
+        <h1 class="text-4xl font-bold tracking-tight text-primary mb-2">HexaTask</h1>
         <p class="text-slate-500">Create your account to get started</p>
       </div>
 
@@ -119,7 +119,8 @@ export class RegisterComponent {
         },
         error: (err) => {
           this.isLoading.set(false);
-          this.snackBar.open(err.error?.message || 'Registration failed. Please try again.', 'Close', {
+          const errorMessage = err.error?.detail || err.error?.message || 'Registration failed. Please try again.';
+          this.snackBar.open(errorMessage, 'Close', {
             duration: 5000
           });
         }

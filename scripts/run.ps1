@@ -1,11 +1,11 @@
 # ============================================
-# ParkNexus Run Script (Windows)
+# HexaTask Run Script (Windows)
 # ============================================
 
 $ErrorActionPreference = "Stop"
 
 Write-Host "╔════════════════════════════════════════╗" -ForegroundColor Cyan
-Write-Host "║   ParkNexus - Starting Application     ║" -ForegroundColor Cyan
+Write-Host "║   HexaTask - Starting Application     ║" -ForegroundColor Cyan
 Write-Host "╚════════════════════════════════════════╝" -ForegroundColor Cyan
 Write-Host ""
 
@@ -64,7 +64,7 @@ docker compose ps
 
 Write-Host ""
 Write-Host "╔═══════════════════════════════════════════╗" -ForegroundColor Cyan
-Write-Host "║          ParkNexus URLs                   ║" -ForegroundColor Cyan
+Write-Host "║          HexaTask URLs                   ║" -ForegroundColor Cyan
 Write-Host "╠═══════════════════════════════════════════╣" -ForegroundColor Cyan
 Write-Host "║  Frontend:   http://localhost:80         ║" -ForegroundColor Cyan
 Write-Host "║  Backend:    http://localhost:8080       ║" -ForegroundColor Cyan

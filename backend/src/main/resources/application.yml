@@ -4,7 +4,7 @@ server:
 
 spring:
   application:
-    name: projectmanagement
+    name: hexatask
   profiles:
     active: local
   jpa:
@@ -32,7 +32,7 @@ logging:
     root: INFO
     org.springframework.web: INFO
     org.hibernate.SQL: INFO
-    com.acnexus.projectmanagement: DEBUG
+    com.hexatask.hexatask: DEBUG
 
 # Actuator
 management:
@@ -91,7 +91,7 @@ spring:
 logging:
   level:
     root: WARN
-    com.acnexus.projectmanagement: INFO
+    com.hexatask.hexatask: INFO
     org.springframework.web: WARN
     org.hibernate.SQL: WARN
 
@@ -113,7 +113,7 @@ springdoc:
     tags-sorter: alpha
     try-it-out-enabled: true
   info:
-    title: ProjectManagement API
+    title: Hexatask API
     description: Project and Task Management System
     version: 1.0.0-MVP
     contact:

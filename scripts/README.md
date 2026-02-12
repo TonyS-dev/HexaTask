@@ -1,6 +1,6 @@
-# 🚀 ParkNexus Setup & Run Scripts
+# 🚀 HexaTask Setup & Run Scripts
 
-Cross-platform scripts to set up and run ParkNexus with a single command.
+Cross-platform scripts to set up and run HexaTask with a single command.
 
 ## 📋 Prerequisites
 

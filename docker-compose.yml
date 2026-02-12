@@ -2,10 +2,10 @@ services:
   # PostgreSQL Database service
   postgres:
     image: postgres:15-alpine
-    container_name: projectmanagement-postgres-db
+    container_name: hexatask-postgres-db
     restart: unless-stopped
     networks:
-      - acnexus-net
+      - hexatask-net
     env_file:
       - .env
     environment:
@@ -28,9 +28,9 @@ services:
       context: ./backend
       dockerfile: Dockerfile
       target: build # Trick to skip the final runtime image and use the build stage
-    container_name: projectmanagement-backend
+    container_name: hexatask-backend
     networks:
-      - acnexus-net
+      - hexatask-net
     depends_on:
       postgres:
         condition: service_healthy
@@ -59,9 +59,9 @@ services:
       target: builder # Trick to skip the final runtime image and use the build stage
       args:
         VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8080/api}
-    container_name: projectmanagement-frontend
+    container_name: hexatask-frontend
     networks:
-      - acnexus-net
+      - hexatask-net
     ports:
       - "4200:4200" # Development port
     depends_on:
@@ -74,10 +74,10 @@ services:
 
   prometheus:
     image: prom/prometheus
-    container_name: projectmanagement-prometheus
+    container_name: hexatask-prometheus
     restart: unless-stopped
     networks:
-      - acnexus-net
+      - hexatask-net
     volumes:
       - ./backend/prometheus:/etc/prometheus
     ports:
@@ -85,10 +85,10 @@ services:
 
   grafana:
     image: grafana/grafana
-    container_name: projectmanagement-grafana
+    container_name: hexatask-grafana
     restart: unless-stopped
     networks:
-      - acnexus-net
+      - hexatask-net
     ports:
       - "3000:3000"
     volumes:
@@ -103,5 +103,5 @@ volumes:
   gradle_cache:
 
 networks:
-  acnexus-net:
+  hexatask-net:
     driver: bridge
