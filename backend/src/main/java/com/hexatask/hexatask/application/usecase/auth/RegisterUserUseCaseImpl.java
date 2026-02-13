@@ -64,9 +64,9 @@ public class RegisterUserUseCaseImpl implements RegisterUserPort {
                 Collections.singletonList(new SimpleGrantedAuthority(savedUser.getRole().name())));
 
         String accessToken = tokenProvider.createAccessToken(savedUser.getEmail(), savedUser.getId(),
-                auth.getAuthorities());
+                savedUser.getFullName(), auth.getAuthorities());
         String refreshToken = tokenProvider.createRefreshToken(savedUser.getEmail(), savedUser.getId(),
-                auth.getAuthorities());
+                savedUser.getFullName(), auth.getAuthorities());
 
         // Store refresh token in database
         RefreshToken refreshTokenModel = new RefreshToken(

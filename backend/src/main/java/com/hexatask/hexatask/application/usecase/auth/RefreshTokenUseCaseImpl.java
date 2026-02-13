@@ -50,8 +50,8 @@ public class RefreshTokenUseCaseImpl implements RefreshTokenPort {
         List<SimpleGrantedAuthority> authorities = Collections.singletonList(
                 new SimpleGrantedAuthority(user.getRole().name()));
 
-        String newAccessToken = tokenProvider.createAccessToken(user.getEmail(), user.getId(), authorities);
-        String newRefreshToken = tokenProvider.createRefreshToken(user.getEmail(), user.getId(), authorities);
+        String newAccessToken = tokenProvider.createAccessToken(user.getEmail(), user.getId(), user.getFullName(), authorities);
+        String newRefreshToken = tokenProvider.createRefreshToken(user.getEmail(), user.getId(), user.getFullName(), authorities);
 
         RefreshToken newTokenModel = new RefreshToken(
                 null,

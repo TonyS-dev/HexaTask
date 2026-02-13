@@ -14,6 +14,7 @@ public class CustomUserDetails implements UserDetails {
     private final UUID id;
     private final String email;
     private final String password;
+    private final String fullName;
     private final Collection<? extends GrantedAuthority> authorities;
     private final boolean active;
 
@@ -21,21 +22,27 @@ public class CustomUserDetails implements UserDetails {
         this.id = user.getId();
         this.email = user.getEmail();
         this.password = user.getPassword();
+        this.fullName = user.getFullName();
         this.authorities = Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name()));
         this.active = user.isActive();
     }
 
-    public CustomUserDetails(UUID id, String email, String password,
+    public CustomUserDetails(UUID id, String email, String password, String fullName,
             Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.email = email;
         this.password = password;
+        this.fullName = fullName;
         this.authorities = authorities;
         this.active = true; // Assumed active for token-based reconstruction
     }
 
     public UUID getId() {
         return id;
+    }
+
+    public String getFullName() {
+        return fullName;
     }
 
     @Override

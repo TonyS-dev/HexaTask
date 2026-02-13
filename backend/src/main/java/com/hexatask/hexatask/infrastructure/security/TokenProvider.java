@@ -10,7 +10,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -45,25 +44,25 @@ public class TokenProvider {
 
     public String createAccessToken(Authentication authentication) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        return createToken(authentication.getName(), userDetails.getId(), authentication.getAuthorities(),
+        return createToken(authentication.getName(), userDetails.getId(), userDetails.getFullName(), authentication.getAuthorities(),
                 accessTokenValidityInMilliseconds);
     }
 
-    public String createAccessToken(String email, UUID userId, Collection<? extends GrantedAuthority> authorities) {
-        return createToken(email, userId, authorities, accessTokenValidityInMilliseconds);
+    public String createAccessToken(String email, UUID userId, String fullName, Collection<? extends GrantedAuthority> authorities) {
+        return createToken(email, userId, fullName, authorities, accessTokenValidityInMilliseconds);
     }
 
     public String createRefreshToken(Authentication authentication) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        return createToken(authentication.getName(), userDetails.getId(), authentication.getAuthorities(),
+        return createToken(authentication.getName(), userDetails.getId(), userDetails.getFullName(), authentication.getAuthorities(),
                 refreshTokenValidityInMilliseconds);
     }
 
-    public String createRefreshToken(String email, UUID userId, Collection<? extends GrantedAuthority> authorities) {
-        return createToken(email, userId, authorities, refreshTokenValidityInMilliseconds);
+    public String createRefreshToken(String email, UUID userId, String fullName, Collection<? extends GrantedAuthority> authorities) {
+        return createToken(email, userId, fullName, authorities, refreshTokenValidityInMilliseconds);
     }
 
-    private String createToken(String subject, UUID userId, Collection<? extends GrantedAuthority> authorities,
+    private String createToken(String subject, UUID userId, String fullName, Collection<? extends GrantedAuthority> authorities,
             long validity) {
         String authoritiesStr = authorities.stream()
                 .map(GrantedAuthority::getAuthority)
@@ -75,6 +74,7 @@ public class TokenProvider {
         return Jwts.builder()
                 .setSubject(subject)
                 .claim("userId", userId.toString())
+                .claim("fullName", fullName)
                 .claim(AUTHORITIES_KEY, authoritiesStr)
                 .setIssuedAt(new Date(now))
                 .setExpiration(validityDate)
@@ -105,11 +105,13 @@ public class TokenProvider {
 
         String userIdStr = (String) claims.get("userId");
         UUID userId = UUID.fromString(userIdStr);
+        String fullName = (String) claims.get("fullName");
 
         CustomUserDetails principal = new CustomUserDetails(
                 userId,
                 username,
                 "", // Password not needed for token auth
+                fullName,
                 authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
