@@ -18,38 +18,46 @@ interface NotificationItem {
   standalone: true,
   imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, MatChipsModule],
   template: `
-    <div class="min-h-screen bg-background p-8">
-      <header class="max-w-5xl mx-auto mb-8 flex items-center justify-between">
+    <div class="min-h-screen bg-swiss-gray-50 p-swiss-5">
+      <header class="max-w-5xl mx-auto mb-swiss-8 flex items-start justify-between">
         <div>
-          <p class="text-xs uppercase tracking-[0.2em] text-accent font-semibold">Notifications</p>
-          <h1 class="text-3xl font-bold text-primary">Inbox</h1>
-          <p class="text-slate-500">Updates from projects, tasks, and team activity.</p>
+          <p class="text-label uppercase tracking-widest text-swiss-gray-600 mb-2">Notifications</p>
+          <h1 class="text-h2 text-swiss-black mb-2">Inbox</h1>
+          <p class="text-body text-swiss-gray-600">Updates from projects, tasks, and team activity</p>
         </div>
-        <button mat-stroked-button class="rounded-xl" (click)="markAllRead()">Mark all read</button>
+        <button class="btn-swiss btn-secondary" (click)="markAllRead()">Mark All Read</button>
       </header>
 
-      <main class="max-w-5xl mx-auto flex flex-col gap-3">
+      <main class="max-w-5xl mx-auto space-y-swiss-2">
         @for (item of notifications(); track item.id) {
-          <mat-card class="border-none shadow-soft-sm rounded-2xl">
-            <div class="p-4 flex items-start gap-3">
-              <mat-icon [color]="item.type === 'alert' ? 'warn' : 'primary'">notifications</mat-icon>
-              <div class="flex-1">
-                <div class="flex items-center gap-2 mb-1">
-                  <h3 class="text-base font-semibold text-primary m-0">{{ item.title }}</h3>
-                  <mat-chip [color]="item.type === 'alert' ? 'warn' : 'primary'" selected>
-                    {{ item.type === 'alert' ? 'Alert' : 'Info' }}
-                  </mat-chip>
-                  <span class="text-xs text-slate-400">{{ item.time }}</span>
+          <div class="card-swiss-simple !p-0 overflow-hidden">
+            <div class="flex">
+              <!-- Type indicator bar -->
+              <div [class]="item.type === 'alert' ? 'bg-swiss-red' : 'bg-swiss-black'" 
+                   class="w-2 flex-shrink-0"></div>
+              
+              <div class="flex items-start gap-4 p-swiss-4 flex-1">
+                <mat-icon [class]="item.type === 'alert' ? 'text-swiss-red' : 'text-swiss-black'">
+                  {{ item.type === 'alert' ? 'warning' : 'notifications' }}
+                </mat-icon>
+                <div class="flex-1">
+                  <div class="flex items-center gap-3 mb-1">
+                    <h3 class="text-body-lg font-bold text-swiss-black m-0">{{ item.title }}</h3>
+                    <span [class]="item.type === 'alert' ? 'badge-error' : 'badge-active'" class="badge-swiss">
+                      {{ item.type === 'alert' ? 'ALERT' : 'INFO' }}
+                    </span>
+                    <span class="text-body-sm text-swiss-gray-400">{{ item.time }}</span>
+                  </div>
+                  <p class="text-body text-swiss-gray-600 m-0">{{ item.body }}</p>
                 </div>
-                <p class="text-slate-600 m-0">{{ item.body }}</p>
               </div>
             </div>
-          </mat-card>
+          </div>
         } @empty {
-          <div class="py-16 text-center bg-white rounded-3xl shadow-soft-sm">
-            <mat-icon class="text-5xl text-slate-200 mb-3">notifications_off</mat-icon>
-            <h3 class="text-lg font-semibold text-slate-500">No notifications</h3>
-            <p class="text-slate-400">You are all caught up.</p>
+          <div class="card-swiss-simple text-center py-swiss-10">
+            <mat-icon class="text-6xl text-swiss-gray-200 mb-4">notifications_off</mat-icon>
+            <h3 class="text-h4 text-swiss-gray-400 mb-2">No notifications</h3>
+            <p class="text-body text-swiss-gray-400">You are all caught up</p>
           </div>
         }
       </main>

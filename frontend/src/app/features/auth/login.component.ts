@@ -25,62 +25,61 @@ import { AuthService } from '../../core/services/auth.service';
     MatSnackBarModule
   ],
   template: `
-    <div class="min-h-screen bg-background flex flex-col items-center justify-center p-6">
-      <div class="mb-12 text-center">
-        <h1 class="text-4xl font-bold tracking-tight text-primary mb-2">HexaTask</h1>
-        <p class="text-slate-500">Log in to manage your projects</p>
+    <div class="min-h-screen bg-swiss-gray-50 flex flex-col items-center justify-center p-swiss-5">
+      <!-- Logo and tagline -->
+      <div class="mb-swiss-8 text-center">
+        <h1 class="text-h1 text-swiss-black mb-2">HEXATASK</h1>
+        <p class="text-body text-swiss-gray-600">Log in to manage your projects</p>
       </div>
 
-      <mat-card class="w-full max-w-md shadow-soft-md border-none overflow-hidden">
-        <div class="h-2 bg-accent"></div>
-        <mat-card-header class="p-8 pb-0">
-          <mat-card-title class="text-2xl font-semibold">Welcome back</mat-card-title>
-        </mat-card-header>
+      <!-- Login Card -->
+      <div class="card-swiss-simple w-full max-w-md">
+        <!-- Header accent bar -->
+        <div class="h-2 bg-swiss-black -mx-swiss-5 -mt-swiss-5 mb-swiss-5"></div>
+        
+        <h2 class="text-h3 text-swiss-black mb-swiss-4">Welcome back</h2>
 
-        <mat-card-content class="p-8">
-          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
-            <mat-form-field appearance="fill" class="w-full">
-              <mat-label>Email Address</mat-label>
-              <input matInput formControlName="email" type="email" placeholder="name@company.com">
-              @if (loginForm.get('email')?.hasError('email')) {
-                <mat-error>Please enter a valid email</mat-error>
-              }
-            </mat-form-field>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-swiss-3">
+          <div>
+            <label class="input-label">Email Address</label>
+            <input type="email" 
+                   formControlName="email" 
+                   placeholder="name&#64;company.com"
+                   class="input-swiss w-full">
+            @if (loginForm.get('email')?.hasError('email') && loginForm.get('email')?.touched) {
+              <p class="text-body-sm text-swiss-red mt-1">Please enter a valid email</p>
+            }
+          </div>
 
-            <mat-form-field appearance="fill" class="w-full">
-              <mat-label>Password</mat-label>
-              <input matInput formControlName="password" type="password">
-            </mat-form-field>
+          <div>
+            <label class="input-label">Password</label>
+            <input type="password" 
+                   formControlName="password"
+                   class="input-swiss w-full">
+          </div>
 
-            <button mat-flat-button color="primary" 
-                    class="h-12 text-lg bg-accent hover:bg-accent-dark transition-colors"
-                    [disabled]="loginForm.invalid || isLoading()">
-              <div class="flex items-center justify-center gap-2">
-                @if (isLoading()) {
-                  <mat-spinner diameter="20" color="accent"></mat-spinner>
-                  <span>Authenticating...</span>
-                } @else {
-                  <span>Sign In</span>
-                }
-              </div>
-            </button>
-          </form>
-        </mat-card-content>
+          <button type="submit" 
+                  class="btn-swiss btn-primary w-full"
+                  [disabled]="loginForm.invalid || isLoading()">
+            @if (isLoading()) {
+              Authenticating...
+            } @else {
+              Sign In
+            }
+          </button>
+        </form>
 
-        <mat-card-footer class="p-8 pt-0 text-center">
-          <p class="text-slate-500 text-sm">
-            Don't have an account? 
-            <a routerLink="/auth/register" class="text-accent font-semibold hover:underline">Get started</a>
-          </p>
-        </mat-card-footer>
-      </mat-card>
+        <hr class="divider-swiss my-swiss-4">
+
+        <p class="text-body text-swiss-gray-600 text-center">
+          Don't have an account? 
+          <a routerLink="/auth/register" class="link-swiss font-bold">Get started</a>
+        </p>
+      </div>
     </div>
   `,
   styles: [`
     :host { display: block; }
-    mat-card { border-radius: 1rem !important; }
-    ::ng-deep .mat-mdc-form-field-subscript-wrapper { display: none; }
-    ::ng-deep .mat-mdc-text-field-wrapper::before { display: none !important; }
   `]
 })
 export class LoginComponent {

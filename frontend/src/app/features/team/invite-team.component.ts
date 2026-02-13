@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-invite-team',
@@ -19,46 +20,59 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatIconModule
   ],
   template: `
-    <div class="min-h-screen bg-background p-8">
+    <div class="min-h-screen bg-swiss-gray-50 p-swiss-5">
       <div class="max-w-3xl mx-auto">
-        <div class="flex items-center justify-between mb-8">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-swiss-8">
           <div>
-            <p class="text-xs uppercase tracking-[0.2em] text-accent font-semibold">Team</p>
-            <h1 class="text-3xl font-bold text-primary">Invite teammate</h1>
-            <p class="text-slate-500">Send a collaboration invite with a role.</p>
+            <p class="text-label uppercase tracking-widest text-swiss-gray-600 mb-2">Team</p>
+            <h1 class="text-h2 text-swiss-black mb-2">Invite Teammate</h1>
+            <p class="text-body text-swiss-gray-600">Send a collaboration invite with a role</p>
           </div>
-          <a mat-stroked-button routerLink="/team" class="rounded-xl">Back to team</a>
+          <a routerLink="/team" class="btn-swiss btn-secondary">
+            <mat-icon class="text-lg">arrow_back</mat-icon>
+            Back
+          </a>
         </div>
 
-        <mat-card class="border-none shadow-soft-md rounded-2xl overflow-hidden">
-          <mat-card-content class="p-8 flex flex-col gap-6">
-            <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-5">
-              <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Email</mat-label>
-                <input matInput formControlName="email" type="email" placeholder="teammate@company.com">
-                @if (form.get('email')?.invalid && form.get('email')?.touched) {
-                  <mat-error>Valid email required</mat-error>
-                }
-              </mat-form-field>
+        <!-- Form Card -->
+        <div class="card-swiss-simple">
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-swiss-4">
+            <div>
+              <label class="input-label">Email</label>
+              <input type="email" 
+                     formControlName="email" 
+                     placeholder="teammate&#64;company.com"
+                     class="input-swiss w-full">
+              @if (form.get('email')?.invalid && form.get('email')?.touched) {
+                <p class="text-body-sm text-swiss-red mt-1">Valid email required</p>
+              }
+            </div>
 
-              <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Role</mat-label>
-                <input matInput formControlName="role" placeholder="Designer, Engineer, PM">
-              </mat-form-field>
+            <div>
+              <label class="input-label">Role</label>
+              <input type="text" 
+                     formControlName="role" 
+                     placeholder="Designer, Engineer, PM"
+                     class="input-swiss w-full">
+            </div>
 
-              <div class="flex gap-3 justify-end">
-                <a mat-stroked-button routerLink="/team" class="rounded-xl">Cancel</a>
-                <button mat-flat-button color="primary" class="bg-accent rounded-xl px-6"
-                        [disabled]="form.invalid || isSubmitting()">
-                  @if (isSubmitting()) { Sending... } @else { Send invite }
-                </button>
-              </div>
-            </form>
-          </mat-card-content>
-        </mat-card>
+            <hr class="divider-swiss-bold">
+
+            <div class="flex gap-3 justify-end">
+              <a routerLink="/team" class="btn-swiss btn-secondary">Cancel</a>
+              <button type="submit" 
+                      class="btn-swiss btn-primary"
+                      [disabled]="form.invalid || isSubmitting()">
+                @if (isSubmitting()) { Sending... } @else { Send Invite }
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   `

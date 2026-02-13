@@ -22,35 +22,39 @@ import { Router, RouterLink } from '@angular/router';
     MatSnackBarModule
   ],
   template: `
-    <div class="min-h-screen bg-background flex items-center justify-center p-6">
-      <mat-card class="w-full max-w-md shadow-soft-md border-none rounded-2xl overflow-hidden">
-        <div class="h-2 bg-accent"></div>
-        <mat-card-header class="p-8 pb-0">
-          <mat-card-title class="text-2xl font-semibold">Reset your password</mat-card-title>
-          <p class="text-slate-500">Enter your email to receive a reset link.</p>
-        </mat-card-header>
+    <div class="min-h-screen bg-swiss-gray-50 flex items-center justify-center p-swiss-5">
+      <div class="card-swiss-simple w-full max-w-md">
+        <!-- Header accent bar -->
+        <div class="h-2 bg-swiss-black -mx-swiss-5 -mt-swiss-5 mb-swiss-5"></div>
+        
+        <h2 class="text-h3 text-swiss-black mb-2">Reset Your Password</h2>
+        <p class="text-body text-swiss-gray-600 mb-swiss-4">Enter your email to receive a reset link</p>
 
-        <mat-card-content class="p-8">
-          <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
-            <mat-form-field appearance="outline" class="w-full">
-              <mat-label>Email Address</mat-label>
-              <input matInput formControlName="email" type="email" placeholder="you@company.com">
-              @if (form.get('email')?.invalid && form.get('email')?.touched) {
-                <mat-error>Please enter a valid email</mat-error>
-              }
-            </mat-form-field>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-swiss-3">
+          <div>
+            <label class="input-label">Email Address</label>
+            <input type="email" 
+                   formControlName="email" 
+                   placeholder="you&#64;company.com"
+                   class="input-swiss w-full">
+            @if (form.get('email')?.invalid && form.get('email')?.touched) {
+              <p class="text-body-sm text-swiss-red mt-1">Please enter a valid email</p>
+            }
+          </div>
 
-            <button mat-flat-button color="primary" class="h-12 bg-accent text-lg"
-                    [disabled]="form.invalid || isSubmitting()">
-              @if (isSubmitting()) { Sending... } @else { Send Reset Link }
-            </button>
-          </form>
-        </mat-card-content>
+          <button type="submit" 
+                  class="btn-swiss btn-primary w-full"
+                  [disabled]="form.invalid || isSubmitting()">
+            @if (isSubmitting()) { Sending... } @else { Send Reset Link }
+          </button>
+        </form>
 
-        <mat-card-footer class="p-8 pt-0 text-center">
-          <a routerLink="/auth/login" class="text-accent font-semibold hover:underline">Back to login</a>
-        </mat-card-footer>
-      </mat-card>
+        <hr class="divider-swiss my-swiss-4">
+
+        <p class="text-body text-swiss-gray-600 text-center">
+          <a routerLink="/auth/login" class="link-swiss font-bold">Back to login</a>
+        </p>
+      </div>
     </div>
   `
 })

@@ -18,37 +18,40 @@ import { MatIconModule } from '@angular/material/icon';
     MatIconModule
   ],
   template: `
-    <div class="min-h-screen bg-background p-8">
-      <div class="max-w-4xl mx-auto flex items-center justify-between mb-6">
-        <a routerLink="/tasks" class="flex items-center gap-2 text-slate-500 hover:text-accent">
-          <mat-icon>arrow_back</mat-icon>
-          Back to tasks
-        </a>
-        <mat-chip color="primary" selected>In progress</mat-chip>
+    <div class="min-h-screen bg-swiss-gray-50 p-swiss-5">
+      <div class="max-w-4xl mx-auto">
+        <!-- Back Navigation -->
+        <div class="flex items-center justify-between mb-swiss-4">
+          <a routerLink="/tasks" class="inline-flex items-center gap-2 text-body text-swiss-gray-600 hover:text-swiss-black transition-colors no-underline">
+            <mat-icon>arrow_back</mat-icon>
+            Back to tasks
+          </a>
+          <span class="badge-swiss badge-progress">In Progress</span>
+        </div>
+
+        <!-- Task Card -->
+        <div class="card-swiss-simple">
+          <h1 class="text-h2 text-swiss-black mb-2">Task {{ taskId }}</h1>
+          <p class="text-body text-swiss-gray-600 mb-swiss-5">Detailed view with description, comments, attachments, and activity</p>
+
+          <div class="space-y-swiss-3">
+            <section class="bg-swiss-gray-50 border-2 border-swiss-gray-200 p-swiss-4">
+              <h3 class="text-label text-swiss-gray-600 mb-2">Description</h3>
+              <p class="text-body text-swiss-gray-600 m-0">Add a rich description, acceptance criteria, and links here.</p>
+            </section>
+
+            <section class="bg-swiss-gray-50 border-2 border-swiss-gray-200 p-swiss-4">
+              <h3 class="text-label text-swiss-gray-600 mb-2">Subtasks</h3>
+              <p class="text-body text-swiss-gray-600 m-0">Subtasks and checklists will be listed here.</p>
+            </section>
+
+            <section class="bg-swiss-gray-50 border-2 border-swiss-gray-200 p-swiss-4">
+              <h3 class="text-label text-swiss-gray-600 mb-2">Comments</h3>
+              <p class="text-body text-swiss-gray-600 m-0">Conversation and mentions appear here.</p>
+            </section>
+          </div>
+        </div>
       </div>
-
-      <mat-card class="max-w-4xl mx-auto border-none shadow-soft-md rounded-2xl overflow-hidden">
-        <mat-card-header class="p-6 pb-2">
-          <mat-card-title class="text-2xl font-bold text-primary">Task {{ taskId }}</mat-card-title>
-          <p class="text-slate-500">Detailed view with description, comments, attachments, and activity.</p>
-        </mat-card-header>
-        <mat-card-content class="p-6 pt-0 flex flex-col gap-4">
-          <section class="bg-slate-50 rounded-xl p-4">
-            <h3 class="text-sm uppercase tracking-wide text-slate-500 mb-2">Description</h3>
-            <p class="text-slate-600 mb-0">Add a rich description, acceptance criteria, and links here.</p>
-          </section>
-
-          <section class="bg-slate-50 rounded-xl p-4">
-            <h3 class="text-sm uppercase tracking-wide text-slate-500 mb-2">Subtasks</h3>
-            <p class="text-slate-600 mb-0">Subtasks and checklists will be listed here.</p>
-          </section>
-
-          <section class="bg-slate-50 rounded-xl p-4">
-            <h3 class="text-sm uppercase tracking-wide text-slate-500 mb-2">Comments</h3>
-            <p class="text-slate-600 mb-0">Conversation and mentions appear here.</p>
-          </section>
-        </mat-card-content>
-      </mat-card>
     </div>
   `
 })

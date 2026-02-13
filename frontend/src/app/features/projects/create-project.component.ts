@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
 import { ProjectService } from '../../core/services/project.service';
 
 @Component({
@@ -20,49 +21,62 @@ import { ProjectService } from '../../core/services/project.service';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatIconModule
   ],
   template: `
-    <div class="min-h-screen bg-background p-8">
+    <div class="min-h-screen bg-swiss-gray-50 p-4 lg:p-swiss-5">
       <div class="max-w-3xl mx-auto">
-        <div class="flex items-center justify-between mb-8">
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-swiss-8">
           <div>
-            <p class="text-xs uppercase tracking-[0.2em] text-accent font-semibold">Create</p>
-            <h1 class="text-3xl font-bold text-primary">New project</h1>
-            <p class="text-slate-500">Define the essentials to get your initiative started.</p>
+            <p class="text-label uppercase tracking-widest text-swiss-gray-600 mb-2">Create</p>
+            <h1 class="text-h2 text-swiss-black mb-2">New Project</h1>
+            <p class="text-body text-swiss-gray-600">Define the essentials to get your initiative started</p>
           </div>
-          <a mat-stroked-button color="primary" routerLink="/dashboard" class="rounded-xl">Back to dashboard</a>
+          <a routerLink="/projects" class="btn-swiss btn-secondary w-full sm:w-auto text-center">
+            <mat-icon class="text-lg">arrow_back</mat-icon>
+            Back
+          </a>
         </div>
 
-        <mat-card class="border-none shadow-soft-md rounded-2xl overflow-hidden">
-          <mat-card-content class="p-8 flex flex-col gap-6">
-            <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-6">
-              <mat-form-field appearance="fill" class="w-full">
-                <mat-label>Project name</mat-label>
-                <input matInput formControlName="name" placeholder="e.g. Apollo Redesign">
-                @if (form.get('name')?.invalid && form.get('name')?.touched) {
-                  <mat-error>Name is required</mat-error>
-                }
-              </mat-form-field>
+        <!-- Form Card -->
+        <div class="card-swiss-simple">
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-swiss-4">
+            <div>
+              <label class="input-label">Project Name</label>
+              <input type="text" 
+                     formControlName="name" 
+                     placeholder="e.g. Apollo Redesign"
+                     class="input-swiss w-full">
+              @if (form.get('name')?.invalid && form.get('name')?.touched) {
+                <p class="text-body-sm text-swiss-red mt-1">Name is required</p>
+              }
+            </div>
 
-              <mat-form-field appearance="fill" class="w-full">
-                <mat-label>Description</mat-label>
-                <textarea matInput formControlName="description" rows="4" placeholder="What are we trying to accomplish?"></textarea>
-                @if (form.get('description')?.invalid && form.get('description')?.touched) {
-                  <mat-error>Description is required</mat-error>
-                }
-              </mat-form-field>
+            <div>
+              <label class="input-label">Description</label>
+              <textarea formControlName="description" 
+                        rows="4" 
+                        placeholder="What are we trying to accomplish?"
+                        class="input-swiss w-full resize-none"></textarea>
+              @if (form.get('description')?.invalid && form.get('description')?.touched) {
+                <p class="text-body-sm text-swiss-red mt-1">Description is required</p>
+              }
+            </div>
 
-              <div class="flex gap-3 justify-end">
-                <a mat-stroked-button routerLink="/dashboard" class="rounded-xl">Cancel</a>
-                <button mat-flat-button color="primary" class="bg-accent rounded-xl px-6"
-                        [disabled]="form.invalid || isSubmitting()">
-                  @if (isSubmitting()) { Creating... } @else { Create project }
-                </button>
-              </div>
-            </form>
-          </mat-card-content>
-        </mat-card>
+            <hr class="divider-swiss-bold">
+
+            <div class="flex flex-col-reverse sm:flex-row gap-3 sm:justify-end">
+              <a routerLink="/projects" class="btn-swiss btn-secondary text-center">Cancel</a>
+              <button type="submit" 
+                      class="btn-swiss btn-primary"
+                      [disabled]="form.invalid || isSubmitting()">
+                @if (isSubmitting()) { Creating... } @else { Create Project }
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   `

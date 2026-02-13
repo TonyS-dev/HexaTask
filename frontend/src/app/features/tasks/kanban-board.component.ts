@@ -21,55 +21,73 @@ import { TaskService, Task, TaskStatus } from '../../core/services/task.service'
     MatProgressBarModule
   ],
   template: `
-    <div class="min-h-screen bg-background p-8">
-      <header class="max-w-6xl mx-auto flex justify-between items-center mb-8">
-        <div>
-          <p class="text-xs uppercase tracking-[0.2em] text-accent font-semibold">Tasks</p>
-          <h1 class="text-3xl font-bold text-primary">Kanban board</h1>
-          <p class="text-slate-500">Visualize progress across the team.</p>
+    <div class="min-h-screen bg-swiss-gray-50 p-swiss-5">
+      <!-- Header -->
+      <header class="max-w-6xl mx-auto mb-swiss-8">
+        <p class="text-label uppercase tracking-widest text-swiss-gray-600 mb-2">Tasks</p>
+        <div class="flex justify-between items-start">
+          <div>
+            <h1 class="text-h2 text-swiss-black mb-2">Kanban Board</h1>
+            <p class="text-body text-swiss-gray-600">Visualize progress across the team</p>
+          </div>
+          <a [routerLink]="['/projects', projectId, 'tasks']" class="btn-swiss btn-secondary" *ngIf="projectId">
+            <mat-icon class="text-lg">view_list</mat-icon>
+            List View
+          </a>
         </div>
-        <a mat-stroked-button [routerLink]="['/projects', projectId, 'tasks']" class="rounded-xl" *ngIf="projectId">
-          <mat-icon class="text-base mr-2">view_list</mat-icon>
-          List view
-        </a>
       </header>
 
       <main class="max-w-6xl mx-auto">
         @if (!projectId) {
-          <div class="py-16 text-center bg-white rounded-3xl shadow-soft-sm">
-            <mat-icon class="text-5xl text-slate-200 mb-3">info</mat-icon>
-            <h3 class="text-lg font-semibold text-slate-500">Select a project to view the board</h3>
-            <p class="text-slate-400 mb-4">Kanban view is scoped to a single project.</p>
-            <a mat-flat-button color="primary" class="bg-accent rounded-xl" routerLink="/projects">Go to projects</a>
+          <!-- No Project Selected -->
+          <div class="card-swiss-simple text-center py-swiss-10">
+            <mat-icon class="text-6xl text-swiss-gray-200 mb-4">info</mat-icon>
+            <h3 class="text-h4 text-swiss-gray-400 mb-2">Select a project to view the board</h3>
+            <p class="text-body text-swiss-gray-400 mb-6">Kanban view is scoped to a single project.</p>
+            <a routerLink="/projects" class="btn-swiss btn-primary">Go to Projects</a>
           </div>
         } @else {
+          <!-- Loading State -->
           @if (isLoading()) {
-            <mat-progress-bar mode="indeterminate" class="rounded-full mb-4"></mat-progress-bar>
-          }
-
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            @for (column of columns(); track column.key) {
-              <mat-card class="border-none shadow-soft-sm rounded-2xl overflow-hidden">
-                <mat-card-header class="p-4 border-b border-slate-100 flex justify-between items-center">
-                  <mat-card-title class="text-lg font-bold text-primary">{{ column.name }}</mat-card-title>
-                  <span class="text-sm text-slate-400">{{ column.items.length }}</span>
-                </mat-card-header>
-                <mat-card-content class="p-4 flex flex-col gap-3">
-                  @for (item of column.items; track item.id) {
-                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 flex flex-col gap-2">
-                      <div class="flex justify-between items-start">
-                        <h3 class="text-base font-semibold text-primary m-0">{{ item.title }}</h3>
-                        <mat-chip [color]="priorityColor(item.status)" selected>{{ item.status }}</mat-chip>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-swiss-3">
+              @for (i of [1, 2, 3]; track i) {
+                <div class="card-swiss-simple">
+                  <div class="skeleton-line w-1/2 h-6 mb-4"></div>
+                  <div class="skeleton-line w-full h-20 mb-3"></div>
+                  <div class="skeleton-line w-full h-20"></div>
+                </div>
+              }
+            </div>
+          } @else {
+            <!-- Kanban Columns -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-swiss-3">
+              @for (column of columns(); track column.key) {
+                <div class="card-swiss-simple !p-0">
+                  <!-- Column Header -->
+                  <div class="section-header !mb-0 p-swiss-4 border-b-2 border-swiss-black">
+                    <h2 class="text-h4 text-swiss-black">{{ column.name }}</h2>
+                    <span class="badge-swiss badge-draft">{{ column.items.length }}</span>
+                  </div>
+                  
+                  <!-- Column Content -->
+                  <div class="p-swiss-3 space-y-swiss-2 min-h-[200px]">
+                    @for (item of column.items; track item.id) {
+                      <div class="bg-swiss-gray-50 border-2 border-swiss-gray-200 p-swiss-3 hover:border-swiss-black transition-colors cursor-pointer">
+                        <div class="flex justify-between items-start mb-2">
+                          <h3 class="text-body font-bold text-swiss-black m-0">{{ item.title }}</h3>
+                        </div>
+                        <p class="text-body-sm text-swiss-gray-600 m-0">ID: {{ item.id.slice(0, 8) }}...</p>
                       </div>
-                      <p class="text-sm text-slate-500 m-0">Task ID: {{ item.id }}</p>
-                    </div>
-                  } @empty {
-                    <p class="text-sm text-slate-400 m-0">No items in this column.</p>
-                  }
-                </mat-card-content>
-              </mat-card>
-            }
-          </div>
+                    } @empty {
+                      <div class="py-swiss-4 text-center">
+                        <p class="text-body-sm text-swiss-gray-400 m-0">No items</p>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
         }
       </main>
     </div>
@@ -108,14 +126,5 @@ export class KanbanBoardComponent implements OnInit {
       },
       error: () => this.isLoading.set(false)
     });
-  }
-
-  priorityColor(status: TaskStatus) {
-    switch (status) {
-      case TaskStatus.TO_DO: return 'warn';
-      case TaskStatus.IN_PROGRESS: return 'primary';
-      case TaskStatus.DONE:
-      default: return 'accent';
-    }
   }
 }

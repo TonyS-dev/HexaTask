@@ -4,20 +4,639 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ========================================
+   SWISS CLARITY DESIGN SYSTEM
+   HexaTask - Project Management
+   ======================================== */
+
 :root {
-  --primary-color: #0F172A;
-  --accent-color: #3B82F6;
-  --success-color: #10B981;
-  --background-color: #F8FAFC;
+  /* Neutrales (Base del sistema) */
+  --color-black: #0a0a0a;
+  --color-white: #ffffff;
+  --color-gray-50: #fafafa;
+  --color-gray-100: #f5f5f5;
+  --color-gray-200: #e5e5e5;
+  --color-gray-400: #a3a3a3;
+  --color-gray-600: #666666;
+  --color-gray-800: #1a1a1a;
+
+  /* Acentos (Uso estratégico) */
+  --color-accent-red: #e63946;
+  --color-success: #06d6a0;
+  --color-warning: #ffa500;
+  --color-error: #d32f2f;
+
+  /* Spacing system (8pt grid) */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 40px;
+  --space-6: 48px;
+  --space-8: 64px;
+  --space-10: 80px;
+
+  /* Typography */
+  --font-primary: 'Helvetica Neue', Helvetica, Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  
+  /* Border */
+  --border-width: 2px;
+  --border-color: var(--color-black);
+}
+
+/* ========================================
+   BASE STYLES
+   ======================================== */
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  font-family: 'Inter', 'Roboto', sans-serif;
-  background-color: var(--background-color);
-  color: var(--primary-color);
+  font-family: var(--font-primary);
+  font-size: 15px;
+  line-height: 1.5;
+  background-color: var(--color-gray-50);
+  color: var(--color-black);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .mat-typography {
-  font-family: 'Inter', 'Roboto', sans-serif !important;
+  font-family: var(--font-primary) !important;
+}
+
+/* ========================================
+   TYPOGRAPHY SYSTEM
+   ======================================== */
+
+h1, .h1 {
+  font-size: 56px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin: 0;
+  color: var(--color-black);
+}
+
+h2, .h2 {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0;
+  color: var(--color-black);
+}
+
+h3, .h3 {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  margin: 0;
+  color: var(--color-black);
+}
+
+h4, .h4 {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+  margin: 0;
+  color: var(--color-black);
+}
+
+.text-body-lg {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.text-body {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.text-body-sm {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.text-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ========================================
+   SWISS BUTTONS
+   ======================================== */
+
+.btn-swiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 32px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--font-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 2px solid var(--color-black);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  gap: 8px;
+  border-radius: 0 !important;
+}
+
+.btn-primary {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-white);
+  color: var(--color-black);
+}
+
+.btn-secondary {
+  background-color: var(--color-white);
+  color: var(--color-black);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+.btn-destructive {
+  background-color: var(--color-white);
+  color: var(--color-accent-red);
+  border-color: var(--color-accent-red);
+}
+
+.btn-destructive:hover {
+  background-color: var(--color-accent-red);
+  color: var(--color-white);
+}
+
+.btn-swiss:active {
+  transform: translateY(2px);
+}
+
+.btn-swiss:disabled {
+  background-color: var(--color-gray-200);
+  border-color: var(--color-gray-200);
+  color: var(--color-gray-400);
+  cursor: not-allowed;
+}
+
+/* ========================================
+   SWISS INPUTS
+   ======================================== */
+
+.input-swiss {
+  width: 100%;
+  border: 2px solid var(--color-black);
+  border-radius: 0;
+  padding: 14px 16px;
+  font-size: 15px;
+  font-family: var(--font-primary);
+  background-color: var(--color-white);
+  transition: all 0.2s ease;
+}
+
+.input-swiss:focus {
+  outline: none;
+  box-shadow: 4px 4px 0 var(--color-black);
+}
+
+.input-swiss::placeholder {
+  color: var(--color-gray-400);
+}
+
+.input-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-black);
+  margin-bottom: 8px;
+}
+
+/* ========================================
+   SWISS BADGES
+   ======================================== */
+
+.badge-swiss {
+  display: inline-block;
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-radius: 0;
+}
+
+.badge-active {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+.badge-completed {
+  background-color: var(--color-white);
+  color: var(--color-success);
+  border: 2px solid var(--color-success);
+}
+
+.badge-draft {
+  background-color: var(--color-white);
+  color: var(--color-gray-600);
+  border: 2px solid var(--color-gray-200);
+}
+
+.badge-pending {
+  background-color: var(--color-white);
+  color: var(--color-gray-600);
+  border: 2px solid var(--color-gray-200);
+}
+
+.badge-progress {
+  background-color: var(--color-white);
+  color: var(--color-warning);
+  border: 2px solid var(--color-warning);
+}
+
+.badge-error {
+  background-color: var(--color-white);
+  color: var(--color-error);
+  border: 2px solid var(--color-error);
+}
+
+/* ========================================
+   SWISS CARDS
+   ======================================== */
+
+.card-swiss {
+  background-color: var(--color-white);
+  border: 2px solid var(--color-black);
+  border-radius: 0;
+  padding: var(--space-5);
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.card-swiss::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  background-color: var(--color-black);
+}
+
+.card-swiss:hover {
+  transform: translateX(8px);
+  box-shadow: -8px 8px 0 var(--color-black);
+}
+
+.card-swiss-simple {
+  background-color: var(--color-white);
+  border: 2px solid var(--color-black);
+  border-radius: 0;
+  padding: var(--space-5);
+  transition: all 0.2s ease;
+}
+
+/* ========================================
+   SWISS TASK ITEM
+   ======================================== */
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--color-gray-200);
+  transition: all 0.2s ease;
+}
+
+.task-item:hover {
+  padding-left: 8px;
+  background-color: var(--color-gray-50);
+}
+
+.task-item:last-child {
+  border-bottom: none;
+}
+
+.task-checkbox {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border: 2px solid var(--color-black);
+  border-radius: 0;
+  background-color: var(--color-white);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.task-checkbox:hover {
+  background-color: var(--color-gray-100);
+}
+
+.task-checkbox.checked {
+  background-color: var(--color-black);
+}
+
+.task-checkbox.checked::after {
+  content: '✓';
+  color: var(--color-white);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+@keyframes checkPop {
+  0% { transform: scale(0.8); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.task-checkbox.checked {
+  animation: checkPop 0.2s ease forwards;
+}
+
+/* ========================================
+   SWISS DIVIDER
+   ======================================== */
+
+.divider-swiss {
+  height: 1px;
+  background-color: var(--color-gray-200);
+  border: none;
+  margin: var(--space-3) 0;
+}
+
+.divider-swiss-bold {
+  height: 2px;
+  background-color: var(--color-black);
+  border: none;
+  margin: var(--space-3) 0;
+}
+
+/* ========================================
+   SWISS LAYOUT
+   ======================================== */
+
+.container-swiss {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--space-5);
+}
+
+@media (max-width: 768px) {
+  .container-swiss {
+    padding: var(--space-2);
+  }
+}
+
+/* ========================================
+   SWISS SIDEBAR NAVIGATION
+   ======================================== */
+
+.sidebar-swiss {
+  width: 240px;
+  min-height: 100vh;
+  background-color: var(--color-white);
+  border-right: 2px solid var(--color-black);
+  padding: var(--space-5) var(--space-3);
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+.sidebar-logo {
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-black);
+  margin-bottom: var(--space-5);
+}
+
+.sidebar-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-black);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border-left: 4px solid transparent;
+  margin-left: -4px;
+}
+
+.sidebar-nav-item:hover {
+  background-color: var(--color-gray-50);
+  border-left-color: var(--color-black);
+}
+
+.sidebar-nav-item.active {
+  background-color: var(--color-gray-100);
+  border-left-color: var(--color-black);
+  font-weight: 700;
+}
+
+.main-with-sidebar {
+  margin-left: 240px;
+  min-height: 100vh;
+}
+
+/* ========================================
+   SKELETON LOADING (Swiss Style)
+   ======================================== */
+
+.skeleton-swiss {
+  background-color: var(--color-gray-100);
+  animation: skeletonPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeletonPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.skeleton-line {
+  height: 16px;
+  margin-bottom: 8px;
+  background-color: var(--color-gray-100);
+  animation: skeletonPulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-line:last-child {
+  width: 60%;
+}
+
+/* ========================================
+   ANGULAR MATERIAL OVERRIDES
+   ======================================== */
+
+/* Remove all border-radius from Material components */
+.mat-mdc-card {
+  border-radius: 0 !important;
+}
+
+.mat-mdc-button,
+.mat-mdc-outlined-button,
+.mat-mdc-raised-button,
+.mat-mdc-flat-button,
+.mat-mdc-unelevated-button,
+.mat-mdc-fab,
+.mat-mdc-mini-fab {
+  border-radius: 0 !important;
+}
+
+.mat-mdc-form-field {
+  .mdc-text-field {
+    border-radius: 0 !important;
+  }
+  
+  .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__leading,
+  .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__notch,
+  .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__trailing {
+    border-radius: 0 !important;
+  }
+  
+  .mdc-text-field--filled {
+    border-radius: 0 !important;
+    border: 2px solid var(--color-black);
+    background-color: var(--color-white) !important;
+  }
+  
+  .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    background-color: var(--color-white) !important;
+  }
+
+  .mdc-text-field--filled:hover {
+    background-color: var(--color-white) !important;
+  }
+
+  .mdc-text-field--filled.mdc-text-field--focused {
+    box-shadow: 4px 4px 0 var(--color-black);
+  }
+
+  .mdc-line-ripple {
+    display: none !important;
+  }
+
+  .mat-mdc-form-field-focus-overlay {
+    display: none !important;
+  }
+}
+
+.mat-mdc-chip {
+  border-radius: 0 !important;
+}
+
+.mat-mdc-snack-bar-container {
+  border-radius: 0 !important;
+  --mdc-snackbar-container-color: var(--color-black) !important;
+  --mdc-snackbar-supporting-text-color: white !important;
+  --mat-snack-bar-button-color: white !important;
+  border: 2px solid var(--color-black) !important;
+
+  .mdc-snackbar__surface {
+    background-color: var(--color-black) !important;
+  }
+
+  .mat-mdc-button.mat-mdc-snack-bar-action {
+    color: white !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1) !important;
+    }
+  }
+}
+
+.mat-mdc-menu-panel {
+  border-radius: 0 !important;
+  border: 2px solid var(--color-black) !important;
+}
+
+.mat-mdc-progress-bar {
+  border-radius: 0 !important;
+  
+  .mdc-linear-progress__buffer-bar {
+    background-color: var(--color-gray-200) !important;
+  }
+  
+  .mdc-linear-progress__bar-inner {
+    border-color: var(--color-black) !important;
+  }
+}
+
+.mat-mdc-checkbox {
+  .mdc-checkbox__background {
+    border-radius: 0 !important;
+    border-width: 2px !important;
+    border-color: var(--color-black) !important;
+  }
+}
+
+/* Swiss-style focus states */
+*:focus-visible {
+  outline: 2px solid var(--color-black);
+  outline-offset: 2px;
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+.uppercase-label {
+  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.meta-text {
+  font-size: 13px;
+  color: var(--color-gray-600);
+}
+
+.link-swiss {
+  color: var(--color-black);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: all 0.2s ease;
+}
+
+.link-swiss:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* Section headers */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid var(--color-black);
 }

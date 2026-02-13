@@ -36,126 +36,174 @@ import { TaskService, Task, TaskStatus } from '../../core/services/task.service'
         MatSnackBarModule
     ],
     template: `
-    <div class="min-h-screen bg-background p-8">
-      <nav class="max-w-5xl mx-auto mb-8">
-        <a routerLink="/dashboard" class="flex items-center text-slate-400 hover:text-accent transition-colors gap-2 no-underline font-medium">
+    <div class="min-h-screen bg-swiss-gray-50 p-4 lg:p-swiss-5">
+      <!-- Back Navigation -->
+      <nav class="max-w-5xl mx-auto mb-swiss-4">
+        <a routerLink="/projects" 
+           class="inline-flex items-center gap-2 text-body text-swiss-gray-600 hover:text-swiss-black transition-colors no-underline">
           <mat-icon>arrow_back</mat-icon>
-          Back to Dashboard
+          Back to Projects
         </a>
       </nav>
 
       @if (project(); as p) {
-        <header class="max-w-5xl mx-auto mb-12 flex justify-between items-start">
-          <div>
-            <div class="flex items-center gap-3 mb-2">
-              <h1 class="text-4xl font-bold text-primary m-0">{{ p.name }}</h1>
-              <span [class]="p.status === 'ACTIVE' ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-600'" 
-                    class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-                {{ p.status }}
-              </span>
+        <!-- Project Header -->
+        <header class="max-w-5xl mx-auto mb-swiss-8">
+          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+            <div>
+              <div class="flex flex-wrap items-center gap-3 mb-2">
+                <h1 class="text-h2 text-swiss-black">{{ p.name }}</h1>
+                <span [class]="p.status === 'ACTIVE' ? 'badge-active' : 'badge-draft'" class="badge-swiss">
+                  {{ p.status }}
+                </span>
+              </div>
+              <p class="text-body-lg text-swiss-gray-600">{{ p.description }}</p>
             </div>
-            <p class="text-slate-500 text-lg">{{ p.description }}</p>
           </div>
         </header>
 
-        <main class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <main class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-swiss-4">
           <!-- Task List Column -->
-          <div class="lg:col-span-2 flex flex-col gap-6">
-            <mat-card class="border-none shadow-soft-md rounded-2xl overflow-hidden">
-              <mat-card-header class="p-6 border-b border-slate-50">
-                <mat-card-title class="text-xl font-bold text-primary flex items-center gap-2">
-                  <mat-icon class="text-accent">assignment</mat-icon>
-                  Tasks
-                </mat-card-title>
-              </mat-card-header>
+          <div class="lg:col-span-2">
+            <div class="card-swiss-simple">
+              <!-- Section Header -->
+              <div class="section-header">
+                <div class="flex items-center gap-3">
+                  <mat-icon class="text-swiss-black">assignment</mat-icon>
+                  <h2 class="text-h4 text-swiss-black">Tasks</h2>
+                </div>
+                <span class="badge-swiss badge-draft">{{ tasks().length }} items</span>
+              </div>
 
-              <mat-card-content class="p-0">
-                @if (isLoadingTasks()) {
-                  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-                }
-
-                <mat-selection-list [multiple]="false">
-                  @for (task of tasks(); track task.id) {
-                    <mat-list-option class="h-auto py-4 border-b border-slate-50 last:border-none"
-                                     [disabled]="task.status === 'DONE'"
-                                     [selected]="task.status === 'DONE'">
-                      <div class="flex items-center justify-between w-full">
-                        <div class="flex flex-col gap-1">
-                          <span [class.line-through]="task.status === 'DONE'" 
-                                [class.text-slate-400]="task.status === 'DONE'"
-                                class="text-lg font-semibold text-primary">
-                            {{ task.title }}
-                          </span>
-                          <span class="text-sm text-slate-500">{{ task.description }}</span>
-                        </div>
-                        
-                        <div class="flex items-center gap-4">
-                          @if (task.status !== 'DONE') {
-                            <button mat-icon-button color="accent" (click)="$event.stopPropagation(); onComplete(task)">
-                              <mat-icon>check_circle_outline</mat-icon>
-                            </button>
-                          } @else {
-                            <mat-icon class="text-emerald-500">check_circle</mat-icon>
-                          }
-                        </div>
+              <!-- Loading State -->
+              @if (isLoadingTasks()) {
+                <div class="space-y-4">
+                  @for (i of [1, 2, 3]; track i) {
+                    <div class="task-item">
+                      <div class="skeleton-swiss w-7 h-7"></div>
+                      <div class="flex-1">
+                        <div class="skeleton-line w-2/3 h-5 mb-2"></div>
+                        <div class="skeleton-line w-1/3 h-4"></div>
                       </div>
-                    </mat-list-option>
-                  } @empty {
-                    <div class="p-20 text-center">
-                      <p class="text-slate-400 italic">No tasks yet for this project.</p>
                     </div>
                   }
-                </mat-selection-list>
-              </mat-card-content>
-            </mat-card>
+                </div>
+              } @else {
+                <!-- Task Items -->
+                @for (task of tasks(); track task.id) {
+                  <div class="task-item flex-col sm:flex-row items-start sm:items-center">
+                    <div class="flex items-center gap-3 w-full sm:w-auto sm:flex-1">
+                      <div class="task-checkbox flex-shrink-0" 
+                           [class.checked]="task.status === 'DONE'"
+                           (click)="task.status !== 'DONE' && onComplete(task)">
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <span [class.line-through]="task.status === 'DONE'" 
+                              [class.text-swiss-gray-400]="task.status === 'DONE'"
+                              class="text-body-lg font-medium text-swiss-black break-words">
+                          {{ task.title }}
+                        </span>
+                        @if (task.description) {
+                          <p class="text-body-sm text-swiss-gray-600 mt-1 break-words">{{ task.description }}</p>
+                        }
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-2 mt-3 sm:mt-0 sm:ml-3 flex-shrink-0">
+                      @if (task.status === 'TO_DO') {
+                        <button (click)="onStartProgress(task)" 
+                                class="btn-swiss btn-secondary !py-1 !px-3 text-label">
+                          Start
+                        </button>
+                      }
+                      @if (task.status === 'IN_PROGRESS') {
+                        <button (click)="onComplete(task)" 
+                                class="btn-swiss btn-primary !py-1 !px-3 text-label">
+                          Complete
+                        </button>
+                      }
+                      <span [class]="getTaskStatusClass(task.status)" class="badge-swiss">
+                        {{ task.status === 'TO_DO' ? 'TO DO' : (task.status === 'IN_PROGRESS' ? 'IN PROGRESS' : 'DONE') }}
+                      </span>
+                    </div>
+                  </div>
+                } @empty {
+                  <div class="py-swiss-8 text-center">
+                    <mat-icon class="text-5xl text-swiss-gray-200 mb-4">checklist</mat-icon>
+                    <p class="text-body text-swiss-gray-400">No tasks yet for this project</p>
+                  </div>
+                }
+              }
+            </div>
           </div>
 
           <!-- Actions Column -->
-          <div class="flex flex-col gap-6">
-            <mat-card class="border-none shadow-soft-md rounded-2xl bg-primary text-white p-6">
-              <h3 class="text-lg font-bold mb-4">Add Quick Task</h3>
-              <form (ngSubmit)="onAddTask()" class="flex flex-col gap-4">
-                <mat-form-field appearance="fill" class="dark-form-field">
-                  <mat-label class="text-slate-400">Task Title</mat-label>
-                  <input matInput [(ngModel)]="newTaskTitle" name="title" required placeholder="e.g. Design Wireframes">
-                </mat-form-field>
+          <div class="space-y-swiss-4">
+            <!-- Add Task Card -->
+            <div class="card-swiss-simple bg-swiss-black !border-0">
+              <h3 class="text-h4 text-white mb-swiss-4">Add Quick Task</h3>
+              <form (ngSubmit)="onAddTask()" class="space-y-swiss-3">
+                <div>
+                  <label class="input-label text-swiss-gray-400">Task Title</label>
+                  <input type="text" 
+                         [(ngModel)]="newTaskTitle" 
+                         name="title" 
+                         required 
+                         placeholder="e.g. Design Wireframes"
+                         class="input-swiss w-full">
+                </div>
 
-                <mat-form-field appearance="fill" class="dark-form-field">
-                  <mat-label class="text-slate-400">Description</mat-label>
-                  <textarea matInput [(ngModel)]="newTaskDescription" name="description" rows="2"></textarea>
-                </mat-form-field>
+                <div>
+                  <label class="input-label text-swiss-gray-400">Description</label>
+                  <textarea [(ngModel)]="newTaskDescription" 
+                            name="description" 
+                            rows="3"
+                            placeholder="Optional description..."
+                            class="input-swiss w-full resize-none"></textarea>
+                </div>
 
-                <button mat-flat-button class="bg-accent h-12 rounded-xl text-lg font-bold hover:bg-accent-dark transition-colors"
+                <button type="submit" 
+                        class="btn-swiss w-full !bg-white !text-swiss-black !border-white hover:!bg-swiss-gray-100"
                         [disabled]="!newTaskTitle.trim() || isAddingTask()">
                   @if (isAddingTask()) {
-                    <mat-icon class="animate-spin">sync</mat-icon>
+                    Adding...
                   } @else {
                     Add Task
                   }
                 </button>
               </form>
-            </mat-card>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="card-swiss-simple">
+              <h3 class="text-h4 text-swiss-black mb-swiss-3">Statistics</h3>
+              <div class="space-y-3">
+                <div class="flex justify-between items-center py-2 border-b border-swiss-gray-200">
+                  <span class="text-body text-swiss-gray-600">Total Tasks</span>
+                  <span class="text-body font-bold text-swiss-black">{{ tasks().length }}</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-swiss-gray-200">
+                  <span class="text-body text-swiss-gray-600">Completed</span>
+                  <span class="text-body font-bold text-success">{{ getCompletedCount() }}</span>
+                </div>
+                <div class="flex justify-between items-center py-2">
+                  <span class="text-body text-swiss-gray-600">In Progress</span>
+                  <span class="text-body font-bold text-warning">{{ getInProgressCount() }}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </main>
       } @else {
-        <div class="flex justify-center py-40">
-          <mat-spinner diameter="50" color="accent"></mat-spinner>
+        <!-- Loading Project -->
+        <div class="flex flex-col items-center justify-center py-swiss-10">
+          <div class="skeleton-swiss w-16 h-16 mb-4"></div>
+          <p class="text-body text-swiss-gray-400">Loading project...</p>
         </div>
       }
     </div>
   `,
     styles: [`
     :host { display: block; }
-    .dark-form-field {
-      ::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) {
-        background-color: rgba(255, 255, 255, 0.05);
-      }
-      ::ng-deep .mdc-floating-label { color: rgba(255, 255, 255, 0.5); }
-      ::ng-deep .mdc-text-field__input { color: white; }
-    }
-    ::ng-deep .mat-mdc-selection-list .mat-mdc-list-item-selected {
-      background-color: transparent !important;
-    }
   `]
 })
 export class ProjectDetailsComponent implements OnInit {
@@ -195,6 +243,23 @@ export class ProjectDetailsComponent implements OnInit {
         });
     }
 
+    getTaskStatusClass(status: TaskStatus): string {
+        switch (status) {
+            case TaskStatus.DONE: return 'badge-completed';
+            case TaskStatus.IN_PROGRESS: return 'badge-progress';
+            case TaskStatus.TO_DO:
+            default: return 'badge-draft';
+        }
+    }
+
+    getCompletedCount(): number {
+        return this.tasks().filter(t => t.status === TaskStatus.DONE).length;
+    }
+
+    getInProgressCount(): number {
+        return this.tasks().filter(t => t.status === TaskStatus.IN_PROGRESS).length;
+    }
+
     onAddTask() {
         const p = this.project();
         if (!p || !this.newTaskTitle.trim()) return;
@@ -225,6 +290,20 @@ export class ProjectDetailsComponent implements OnInit {
         this.taskService.updateTaskStatus(task.id, TaskStatus.DONE).subscribe({
             next: () => {
                 this.snackBar.open(`Task "${task.title}" marked as complete!`, 'Close', {
+                    duration: 3500
+                });
+                this.loadTasks(task.projectId);
+            },
+            error: () => {
+                this.snackBar.open('Failed to update task status.', 'Close', { duration: 3500 });
+            }
+        });
+    }
+
+    onStartProgress(task: Task) {
+        this.taskService.updateTaskStatus(task.id, TaskStatus.IN_PROGRESS).subscribe({
+            next: () => {
+                this.snackBar.open(`Task "${task.title}" is now in progress!`, 'Close', {
                     duration: 3500
                 });
                 this.loadTasks(task.projectId);

@@ -26,42 +26,45 @@ interface Member {
     MatChipsModule
   ],
   template: `
-    <div class="min-h-screen bg-background p-8">
-      <header class="max-w-6xl mx-auto flex justify-between items-center mb-8">
+    <div class="min-h-screen bg-swiss-gray-50 p-swiss-5">
+      <header class="max-w-5xl mx-auto flex justify-between items-start mb-swiss-8">
         <div>
-          <p class="text-xs uppercase tracking-[0.2em] text-accent font-semibold">Team</p>
-          <h1 class="text-3xl font-bold text-primary">Team members</h1>
-          <p class="text-slate-500">Manage collaborators and their access.</p>
+          <p class="text-label uppercase tracking-widest text-swiss-gray-600 mb-2">Team</p>
+          <h1 class="text-h2 text-swiss-black mb-2">Team Members</h1>
+          <p class="text-body text-swiss-gray-600">Manage collaborators and their access</p>
         </div>
-        <a mat-flat-button color="primary" class="bg-accent rounded-xl" routerLink="/team/invite">
-          <mat-icon class="text-base mr-2">person_add</mat-icon>
-          Invite member
+        <a routerLink="/team/invite" class="btn-swiss btn-primary">
+          <mat-icon class="text-lg">person_add</mat-icon>
+          Invite Member
         </a>
       </header>
 
-      <main class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
+      <main class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-swiss-3">
         @for (member of members(); track member.id) {
-          <mat-card class="border-none shadow-soft-sm rounded-2xl overflow-hidden">
-            <div class="p-4 flex items-center justify-between">
+          <div class="card-swiss-simple">
+            <div class="flex items-center justify-between">
               <div>
-                <h3 class="text-lg font-semibold text-primary m-0">{{ member.name }}</h3>
-                <p class="text-sm text-slate-500 m-0">{{ member.role }}</p>
-                <p class="text-sm text-slate-400 m-0">{{ member.email }}</p>
+                <h3 class="text-h4 text-swiss-black mb-1">{{ member.name }}</h3>
+                <p class="text-body text-swiss-gray-600 mb-1">{{ member.role }}</p>
+                <p class="text-body-sm text-swiss-gray-400 m-0">{{ member.email }}</p>
               </div>
               <div class="flex items-center gap-3">
-                <mat-chip [color]="member.status === 'ACTIVE' ? 'primary' : 'warn'" selected>{{ member.status }}</mat-chip>
-                <a mat-icon-button [routerLink]="['/team', member.id, 'profile']" aria-label="View profile">
+                <span [class]="member.status === 'ACTIVE' ? 'badge-active' : 'badge-draft'" class="badge-swiss">
+                  {{ member.status }}
+                </span>
+                <a [routerLink]="['/team', member.id, 'profile']" 
+                   class="w-10 h-10 flex items-center justify-center border-2 border-swiss-black hover:bg-swiss-black hover:text-white transition-colors">
                   <mat-icon>open_in_new</mat-icon>
                 </a>
               </div>
             </div>
-          </mat-card>
+          </div>
         } @empty {
-          <div class="py-16 text-center bg-white rounded-3xl shadow-soft-sm">
-            <mat-icon class="text-5xl text-slate-200 mb-3">group</mat-icon>
-            <h3 class="text-lg font-semibold text-slate-500">No team members yet</h3>
-            <p class="text-slate-400 mb-4">Invite teammates to collaborate.</p>
-            <a mat-flat-button color="primary" class="bg-accent rounded-xl" routerLink="/team/invite">Invite now</a>
+          <div class="col-span-full card-swiss-simple text-center py-swiss-10">
+            <mat-icon class="text-6xl text-swiss-gray-200 mb-4">group</mat-icon>
+            <h3 class="text-h4 text-swiss-gray-400 mb-2">No team members yet</h3>
+            <p class="text-body text-swiss-gray-400 mb-6">Invite teammates to collaborate</p>
+            <a routerLink="/team/invite" class="btn-swiss btn-primary">Invite Now</a>
           </div>
         }
       </main>

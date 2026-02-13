@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 
 export interface UserSession {
     email?: string;
+    fullName?: string;
+    userId?: string;
 }
 
 export interface AuthResponse {
@@ -13,6 +15,15 @@ export interface AuthResponse {
     refreshToken: string;
     tokenType?: string;
     expiresIn?: number;
+}
+
+interface JwtPayload {
+    sub: string;
+    userId: string;
+    fullName: string;
+    auth: string;
+    iat: number;
+    exp: number;
 }
 
 @Injectable({
@@ -33,13 +44,13 @@ export class AuthService {
 
     login(credentials: any): Observable<AuthResponse> {
         return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials).pipe(
-            tap(res => this.handleAuthSuccess(res, credentials.email))
+            tap(res => this.handleAuthSuccess(res))
         );
     }
 
     register(data: any): Observable<AuthResponse> {
         return this.http.post<AuthResponse>(`${this.apiUrl}/register`, data).pipe(
-            tap(res => this.handleAuthSuccess(res, data.email))
+            tap(res => this.handleAuthSuccess(res))
         );
     }
 
@@ -60,20 +71,46 @@ export class AuthService {
         this.currentUser.set(null);
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
-        localStorage.removeItem('user');
         this.router.navigate(['/auth/login']);
     }
 
-    private handleAuthSuccess(res: AuthResponse, email?: string) {
+    private handleAuthSuccess(res: AuthResponse) {
         localStorage.setItem('accessToken', res.accessToken);
         localStorage.setItem('refreshToken', res.refreshToken);
-        this.currentUser.set({ email });
+        this.loadUserFromToken(res.accessToken);
     }
 
     private loadUserFromStorage() {
         const token = localStorage.getItem('accessToken');
         if (token) {
-            this.currentUser.set({});
+            this.loadUserFromToken(token);
+        }
+    }
+
+    private loadUserFromToken(token: string) {
+        const payload = this.decodeToken(token);
+        if (payload) {
+            this.currentUser.set({
+                email: payload.sub,
+                fullName: payload.fullName,
+                userId: payload.userId
+            });
+        }
+    }
+
+    private decodeToken(token: string): JwtPayload | null {
+        try {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(
+                atob(base64)
+                    .split('')
+                    .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+                    .join('')
+            );
+            return JSON.parse(jsonPayload);
+        } catch {
+            return null;
         }
     }
 
