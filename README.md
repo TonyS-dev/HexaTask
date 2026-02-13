@@ -1,47 +1,287 @@
-# HexaTask - Project Management System
 
-A Domain-Driven Design (DDD) Hexagonal Architecture implementation for a Project & Task Management application.
+<center>
+<h1>HexaTask</h1>
+<h3>Domain-Driven Project & Task Management System</h3>
+</center>
 
-**Language:** Java 17 | **Framework:** Spring Boot 3 | **Frontend:** Angular 17 | **Database:** PostgreSQL | **License:** MIT
+<center>
 
-## 🚀 Overview
+<!-- Badges -->
+<a href="https://www.java.com/"><img src="https://img.shields.io/badge/Java-17-blue.svg" /></a>
+<a href="https://spring.io/projects/spring-boot"><img src="https://img.shields.io/badge/Spring%20Boot-3.4.1-brightgreen.svg" /></a>
+<a href="https://angular.io/"><img src="https://img.shields.io/badge/Angular-17-red.svg" /></a>
+<a href="https://www.postgresql.org/"><img src="https://img.shields.io/badge/PostgreSQL-15-blue.svg" /></a>
+<a href="https://github.com/TonyS-dev/hexatask/actions"><img src="https://img.shields.io/badge/Build-Gradle-green.svg" /></a>
+<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-lightgrey.svg" /></a>
 
-Hexa Task System is a full-stack application featuring Domain-Driven Design with Hexagonal Architecture. The focus is on clean code, ownership-based authorization, comprehensive testing, and a secure JWT dual-token authentication flow for seamless user project and task management.
+</center>
 
-This repository contains the complete scaffold with Docker support and local development scripts.
+---
 
-## 📁 Tech Stack
+## Live Demo 
 
-**Backend**
-- Java 17, Spring Boot 3
-- Spring Security with JWT (dual token)
-- Hibernate Envers for audit logging
-- Spring Data JPA + Flyway for migrations
-- PostgreSQL 15
-- Micrometer + Prometheus + Grafana for observability
+Live URL here:
+
+```
+https://hexatask.tonys-dev.com/
+```
+
+---
+
+![App Screenshot](assets/app.png)
+
+---
+
+## Overview
+
+HexaTask is a full-stack project and task management system built with Domain-Driven Design and Hexagonal Architecture. It features robust authentication, ownership-based authorization, audit logging, and comprehensive observability. Designed for clean code, scalability, and developer experience, HexaTask enables seamless management of projects and tasks with modern UI and API.
+
+### Architecture Flow
+
+```mermaid
+graph TD
+  A[User] -->|Interacts| B[Angular Frontend]
+  B -->|API Calls| C[Spring Boot Backend]
+  C -->|DB Access| D[(PostgreSQL Database)]
+  C -->|Metrics| E[Prometheus]
+  E --> F[Grafana]
+  B -->|Static Files| G[Nginx]
+  G -->|Proxy| C
+  C -->|Swagger| H[Swagger UI]
+  subgraph DevOps
+    I[Docker Compose]
+    I --> B
+    I --> C
+    I --> D
+    I --> E
+    I --> F
+    I --> G
+  end
+```
+
+---
+
+## Tech Stack
 
 **Frontend**
-- Angular 17 with Signals API
-- Angular Material UI
-- TypeScript with strict mode
-- RxJS for reactive programming
+- Angular 17 (Signals API, Material UI)
+- TypeScript 5.4
+- RxJS 7.8
+- Tailwind CSS 3.4
+- Nginx (for static serving & API proxy)
 
-**Dev / Tooling**
-- Gradle (wrapper included) for backend
-- Node.js & npm for frontend
-- Docker / docker-compose for full-stack
-- Flyway for database versioning
+**Backend**
+- Java 17
+- Spring Boot 3.4.1
+- Spring Security (JWT dual token)
+- Hibernate Envers (audit logging)
+- Spring Data JPA
+- Flyway (DB migrations)
+- Micrometer (metrics)
 
-## ✅ Features (MVP)
+**Database & Infrastructure**
+- PostgreSQL 15
+- Docker & Docker Compose
+- Prometheus (metrics)
+- Grafana (visualization)
 
-- ✅ Hexagonal Architecture (Clean Code, Ports & Adapters)
-- ✅ JWT Dual Token Authentication (Access + Refresh Tokens)
-- ✅ Ownership-based Authorization (Users can only modify their own projects/tasks)
-- ✅ Soft Delete Pattern with audit trail
-- ✅ Comprehensive Unit Tests (JUnit 5 + Mockito)
-- ✅ Swagger/OpenAPI Documentation
-- ✅ Docker & Docker Compose Support
-- ✅ Paginated project listing with filtering
+**Testing & Quality**
+- JUnit 5, Mockito (backend)
+- Jasmine, Karma (frontend)
+- Swagger/OpenAPI (API docs)
+
+**DevOps & Deployment**
+- Gradle (backend build)
+- Node.js & npm (frontend build)
+- Docker Compose (multi-service orchestration)
+
+---
+
+## Project Structure
+
+```
+hexatask/
+├── backend/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/com/hexatask/hexatask/   # domain, application, infrastructure
+│   │   │   └── resources/                   # application.yml, db/migration
+│   ├── src/test/                            # unit & integration tests
+│   ├── Dockerfile
+│   └── build.gradle
+├── frontend/
+│   ├── src/
+│   │   ├── app/                             # core, features, shared
+│   │   └── main.ts
+│   ├── package.json
+│   ├── angular.json
+│   └── Dockerfile
+├── scripts/
+│   ├── setup.sh
+│   ├── run.sh
+│   └── dev/
+│       ├── start.sh
+│       ├── stop.sh
+│       └── logs.sh
+├── docker-compose.yml
+├── .env (example created by scripts/setup.sh)
+└── README.md
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Java 17+
+- Node.js >= 16
+- npm (or yarn)
+- Docker & Docker Compose
+- PostgreSQL 15 (if running backend outside Docker)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/TonyS-dev/hexatask.git
+   cd hexatask
+   ```
+
+2. **Setup environment**
+   ```bash
+   chmod +x scripts/setup.sh scripts/run.sh
+   ./scripts/setup.sh
+   # Edit .env with your values
+   nano .env
+   ```
+
+3. **Run the application**
+   ```bash
+   ./scripts/run.sh
+   ```
+
+   - Or use Docker Compose directly:
+     ```bash
+     docker compose up --build
+     ```
+
+### Environment Variables
+
+Create a `.env` file in the root directory with:
+
+```
+DB_NAME=hexatask
+DB_USER=youruser
+DB_PASSWORD=yourpassword
+DB_PORT=5432
+JWT_SECRET=your_jwt_secret
+JWT_EXPIRATION=900
+VITE_API_BASE_URL=http://localhost:8080/api
+```
+
+---
+
+## Features
+
+- Domain-Driven Design (Hexagonal Architecture)
+- JWT Dual Token Authentication (Access + Refresh)
+- Ownership-based Authorization
+- Soft Delete with Audit Trail
+- Comprehensive Unit Tests
+- Swagger/OpenAPI Documentation
+- Docker & Docker Compose Support
+- Paginated project listing with filtering
+- Real-time metrics (Prometheus/Grafana)
+- Responsive Angular UI
+
+---
+
+## Usage
+
+- **Login/Register:** Access the frontend at [http://localhost:4200](http://localhost:4200)
+- **Manage Projects/Tasks:** Create, update, delete, and filter projects/tasks
+- **API:** Use Swagger UI at [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html) for API exploration
+
+**Example: Running locally**
+
+```bash
+cd backend
+./gradlew bootRun
+# In another terminal
+cd frontend
+npm install
+npm start
+```
+
+---
+
+## API Documentation
+
+- **Swagger UI:** [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+- **OpenAPI JSON:** `/v3/api-docs`
+- See backend `HELP.md` for Spring Boot API guides
+
+---
+
+## Testing
+
+**Backend:**
+```bash
+cd backend
+./gradlew test
+```
+
+**Frontend:**
+```bash
+cd frontend
+npm test
+```
+
+---
+
+## Deployment
+
+- **Production build (frontend):**
+  ```bash
+  cd frontend
+  npm run build
+  ```
+- **Build backend JAR:**
+  ```bash
+  cd backend
+  ./gradlew build
+  ```
+- **Deploy with Docker Compose:**
+  ```bash
+  docker compose up --build
+  ```
+
+---
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Submit a pull request with clear description
+
+---
+
+## License
+
+MIT License (see LICENSE file or [opensource.org/licenses/MIT](https://opensource.org/licenses/MIT))
+
+---
+
+## Author / Contact
+
+**Antonio Santiago (TonyS-dev)**  
+- [GitHub](https://github.com/TonyS-dev)  
+- Email: santiagor.acarlos@gmail.com
+
+---
+
+Let me know if you want to add screenshots, more API details, or further customization.
 
 ## ✅ Prerequisites
 
