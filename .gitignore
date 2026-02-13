@@ -14,6 +14,8 @@ Desktop.ini
 *.bak
 *.swp
 /tmp
+*.cache
+*/cache
 
 # ===================================================================
 # 2. Security & Environment
@@ -21,6 +23,7 @@ Desktop.ini
 .env
 .env.*
 .env.local
+.env.prod
 env/
 secrets.properties
 application-secret.yml
@@ -28,13 +31,15 @@ application-secret.yml
 !.env.example
 
 # ===================================================================
-# 3. BACKEND (Java / Spring Boot / Gradle)
+# 3. BACKEND (Java / Maven / Gradle / Spring Boot)
 # ===================================================================
-# Gradle caching and build folders
+# Maven / Gradle build folders
+target/
 .gradle/
 build/
 bin/
 
+# Keep gradle wrapper jar in repo
 !gradle/wrapper/gradle-wrapper.jar
 
 # Build artifacts
@@ -47,17 +52,17 @@ bin/
 *.tar.gz
 *.rar
 
+# Compiled class file outputs
+**/build/classes/
+**/build/generated/
+**/target/classes/
+
 # Log files
 logs/
 *.pid
 
 # Spring Boot specific
-target/
-
-# Compiled class file outputs
-**/build/classes/
-**/build/generated/
-**/target/classes/
+# (target/ already included above)
 
 # ===================================================================
 # 4. FRONTEND (Node / React / Vite)
@@ -66,8 +71,8 @@ target/
 node_modules/
 
 # Build outputs
+# (generic 'build/' already ignored above under backend; keep frontend-specific outputs too)
 dist/
-build/
 coverage/
 out/
 
@@ -86,7 +91,11 @@ lerna-debug.log*
 .nyc_output
 
 # Angular-specific
-/.angular/cache
+# Ignore any .angular directory and its contents (matches at any depth)
+.angular/
+# Also explicitly ignore the frontend .angular cache directory
+frontend/.angular/
+/frontend/.angular/
 
 # Sass cache
 .sass-cache/
@@ -102,9 +111,9 @@ __screenshots__/
 .env.development.local
 .env.test.local
 .env.production.local
-.env.local
+# (.env.local already listed above)
 
-# Editor directories and files
+# Editor directories and files (frontend-local)
 backend/.idea
 .vscode
 *.suo
@@ -157,3 +166,31 @@ backend/.idea/
 .settings
 .springBeans
 .sts4-cache
+
+# ===================================================================
+# 7. Project / Misc (from existing repo)
+# ===================================================================
+# Maven helper files
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+.flattened-pom.xml
+
+# Plugin directory for quarkus CLI
+/.quarkus/cli/plugins/
+
+# TLS Certificates
+.certs/
+
+# Patch files
+*.orig
+*.rej
+
+# Vim swap files
+*.swo
+
+# Local environment (already included above, but keep if present)
+# (.env already listed above)
+
+# End of file
