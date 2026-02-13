@@ -74,7 +74,6 @@ node_modules/
 # (generic 'build/' already ignored above under backend; keep frontend-specific outputs too)
 dist/
 coverage/
-out/
 
 # Logs
 npm-debug.log*
